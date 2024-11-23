@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Typing Practice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* General body styling */
+      body {
+        font-family: "Sono", sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        display: flex;
+        flex-direction: column; /* Allow vertical stacking */
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        height: 100vh; /* Full height of the viewport */
+        color: #333;
+      }
+
+      /* Logo styling */
+      .logo {
+        margin-bottom: 20px;
+        text-align: center;
+        
+      }
+
+      .logo img {
+        width: 500px; /* Set the desired width */
+        height: auto; /* Maintain aspect ratio */
+        margin-bottom: 15px;
+        animation: fadeIn 2s ease-in-out;
+        
+      }
+
+      /* Main interactive box styling */
+      .box {
+        background-color: #fff;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        padding: 30px;
+        width: 90%;
+        max-width: 600px;
+        text-align: center;
+      }
+
+      /* Name and subtitle styling */
+      .Name {
+        font-size: 40px;
+        margin-bottom: 10px;
+        color: #444;
+        font-weight: bold;
+      }
+
+      p {
+        margin-bottom: 20px;
+        font-size: 18px;
+        color: #666;
+      }
+
+      /* Button styling */
+      .button {
+        font-size: 18px;
+        padding: 12px 25px;
+        background-color: #555;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.2s, background-color 0.3s ease;
+      }
+
+      .button:hover {
+        background-color: #333;
+        transform: scale(1.05);
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Logo Section -->
+    <div class="logo">
+      <img src="C:\Users\LEGION\Desktop\Web\projects\type master\BG.png" alt="Typing Practice Logo" />
+    </div>
+
+    <!-- Main Box Section -->
+    <div class="box">
+      <div class="container">
+        <h1 class="Name">Typing Practice</h1>
+        <p>A clean and simple website to help you practice typing at home.</p>
+        <a href="index.html">
+          <button class="button">START TYPING</button>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

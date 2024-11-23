@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeMaster - Typing Speed Test</title>
+    <style>
+        /* Global CSS styles */
+        body {
+            font-family: Oswald, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* Navbar styling */
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        nav h1 {
+            font-size: 2rem;
+            margin: 0;
+        }
+        /* Main content container */
+        #container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        /* Text display area */
+        #text-display {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        /* User input field */
+        #user-input {
+            width: 80%;
+            padding: 10px;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        /* Statistics display */
+        #stats {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            font-size: 1.5rem;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+        }
+        /* Error styling */
+        .error {
+            color: red;
+            text-decoration: none;
+        }
+        /* Footer styling */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <h1>TypeMaster</h1>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="container">
+        <!-- Introduction -->
+        <p>Welcome to TypeMaster! This is a fun and interactive Typing Speed Test. Start typing the text displayed below, and we'll calculate your typing speed, accuracy, and errors. Click the "Start" button to begin the test. Happy typing!</p>
+        
+        <!-- Text Display and User Input -->
+        <div id="text-display"></div>
+        <input type="text" id="user-input" autofocus>
+
+        <!-- Statistics -->
+        <div id="stats">
+            <span id="wpm">0</span> WPM | 
+            <span id="accuracy">0</span>% Accuracy | 
+            <span id="errors">0</span> Errors
+        </div>
+
+        <!-- Control Buttons -->
+        <button id="start-btn" class="btn btn-primary">Start</button>
+        <button id="stop-btn" class="btn" style="display:none;">Stop</button>
+        <button id="restart-btn" class="btn" style="display:none;">Restart</button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Typing Speed Test &copy; 2024</p>
+    </footer>
+
+    <!-- JavaScript code -->
+    <script>
+        // Sample text for typing test
+        var sampleTexts = [
+            "The quick brown fox jumps over the lazy dog.",
+            "accuracyDisplayipsum dolor sit amet, consectetur adipiscing elit.",
+            "One fish, two fish, red fish, blue fish.",
+            "To be, or not to be, that is the question.",
+            "In the beginning God created the heavens and the earth.",
+            "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness...",
+            "All happy families are alike; each unhappy family is unhappy in its own way.",
+            "A journey of a thousand miles begins with a single step.",
+            "Life is what happens when you're busy making other plans.",
+            "The only thing we have to fear is fear itself.",
+            "You miss 100% of the shots you don't take.",
+            "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+            "The greatest glory in living lies not in never falling, but in rising every time we fall.",
+            "Believe you can and you're halfway there.",
+            "The way to get started is to quit talking and begin doing.",
+            "The future belongs to those who believe in the beauty of their dreams.",
+            "Don't watch the clock; do what it does. Keep going.",
+            "The only limit to our realization of tomorrow will be our doubts of today.",
+            "It's not whether you get knocked down, it's whether you get up.",
+            "The purpose of our lives is to be happy.",
+            "You must be the change you wish to see in the world.",
+            "It does not matter how slowly you go as long as you do not stop.",
+            "If you want to lift yourself up, lift up someone else."
+        ];
+
+        // Get DOM elements
+        var textDisplay = document.getElementById("text-display");
+        var userInput = document.getElementById("user-input");
+        var wpmDisplay = document.getElementById("wpm");
+        var accuracyDisplay = document.getElementById("accuracy");
+        var errorDisplay = document.getElementById("errors");
+        var startBtn = document.getElementById("start-btn");
+        var stopBtn = document.getElementById("stop-btn");
+        var restartBtn = document.getElementById("restart-btn");
+        var interval, startTime, hasStartedTyping;
+
+        // Additional variable for error count
+        var errorCount = 0;
+        var currentSampleText = "";
+
+        // Function to generate random text for typing test
+        function generateText() {
+            var randomIndex;
+            if (!currentSampleText) {
+                randomIndex = Math.floor(Math.random() * sampleTexts.length);
+                currentSampleText = sampleTexts[randomIndex];
+            }
+            textDisplay.textContent = currentSampleText;
+        }
+
+        // Function to check the typed text
+        function checkText() {
+            var typedText = userInput.value.trim();
+            var sampleWords = currentSampleText.split(/\s+/);
+            var typedWords = typedText.split(/\s+/);
+            var typedWordCount = typedWords.length;
+            var elapsedTime = (new Date() - startTime) / 60000; // Convert milliseconds to minutes
+            var accuracy = calculateAccuracy(typedText);
+            var wpm = Math.round((typedWordCount / elapsedTime) * 60);
+
+            // Update display
+            wpmDisplay.textContent = wpm;
+            accuracyDisplay.textContent = accuracy;
+
+            // Check errors
+            errorCount = 0;
+            for (var i = 0; i < typedWords.length; i++) {
+                if (typedWords[i] !== sampleWords[i]) {
+                    // Highlight wrongly typed words
+                    textDisplay.innerHTML = textDisplay.innerHTML.replace(sampleWords[i], "<span class='error'>" + sampleWords[i] + "</span>");
+                    errorCount++;
+                }
+            }
+            errorDisplay.textContent = errorCount; // Update error display
+
+            if (typedText === currentSampleText) {
+                endTest();
+            }
+        }
+
+        // Function to calculate accuracy
+        function calculateAccuracy(typedText) {
+            var sampleWords = currentSampleText.split(/\s+/);
+            var typedWords = typedText.split(/\s+/);
+            var correctCount = 0;
+
+            for (var i = 0; i < typedWords.length; i++) {
+                if (typedWords[i] === sampleWords[i]) {
+                    correctCount++;
+                }
+            }
+
+            return Math.round((correctCount / sampleWords.length) * 100);
+        }
+
+        // Function to end the test
+        function endTest() {
+            clearInterval(interval);
+            userInput.setAttribute("disabled", true);
+            stopBtn.style.display = "none";
+            restartBtn.style.display = "inline";
+        }
+
+        // Event listener for start button
+        startBtn.addEventListener("click", function() {
+            generateText();
+            userInput.removeAttribute("disabled");
+            userInput.focus();
+            startTime = new Date();
+            startBtn.style.display = "none";
+            stopBtn.style.display = "inline";
+            interval = setInterval(generateText, 5000); // Change text every 5 seconds
+        });
+
+        // Event listener for stop button
+        stopBtn.addEventListener("click", function() {
+            clearInterval(interval);
+            stopBtn.style.display = "none";
+            restartBtn.style.display = "inline";
+        });
+
+        // Event listener for restart button
+        restartBtn.addEventListener("click", function() {
+            userInput.removeAttribute("disabled");
+            userInput.value = "";
+            userInput.focus();
+            currentSampleText = "";
+            startTime = new Date();
+            restartBtn.style.display = "none";
+            startBtn.style.display = "inline";
+        });
+
+        // Event listener for input
+        userInput.addEventListener("input", checkText);
+    </script>
+</body>
+</html>

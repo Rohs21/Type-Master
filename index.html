@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeMaster - Typing Speed Test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Sono', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Navbar styling */
+        nav {
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        nav h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* Container styling */
+        #container {
+            width: 90%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Typing text box styling */
+        #text-display {
+            font-size: 20px;
+            font-weight: bold;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #555;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+
+        /* Input field styling */
+        #user-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Stats box styling */
+        #stats-box {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .stat {
+            font-size: 18px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        /* Correct and Incorrect Text Highlighting */
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #555;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #333;
+        }
+
+        /* Footer Styling */
+        footer {
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <h1>TypeMaster - Typing Speed Test</h1>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="container">
+        <!-- Intro -->
+        <p>Welcome to TypeMaster! Test your typing speed, accuracy, and error count. Start by typing the text below!</p>
+
+        <!-- Typing Area -->
+        <div id="text-display">The quick brown fox jumps over the lazy dog.</div>
+        <input type="text" id="user-input" placeholder="Start typing here..." autofocus>
+
+        <!-- Control Buttons -->
+        <div>
+            <button id="start-btn" class="btn">Start</button>
+            <button id="stop-btn" class="btn" style="display:none;">Stop</button>
+            <button id="restart-btn" class="btn" style="display:none;">Restart</button>
+        </div>
+
+        <!-- Stats Box -->
+        <div id="stats-box">
+            <div class="stat">Speed: <span id="wpm">0</span> WPM</div>
+            <div class="stat">Accuracy: <span id="accuracy">0</span>%</div>
+            <div class="stat">Errors: <span id="errors">0</span></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Typing Speed Test © 2024</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const sampleTexts = [
+            "The quick brown fox jumps over the lazy dog.",
+            "A journey of a thousand miles begins with a single step.",
+            "Typing is the art of turning thoughts into digital words.",
+            "Consistency is key to improving your typing speed and accuracy.",
+            "Practice makes perfect, so keep typing and watch your skills grow.",
+            "Every great coder once struggled with typing. Keep going!",
+            "Mastering typing is the first step to mastering productivity."
+        ];
+    
+        const textDisplay = document.getElementById("text-display");
+        const userInput = document.getElementById("user-input");
+        const wpmDisplay = document.getElementById("wpm");
+        const accuracyDisplay = document.getElementById("accuracy");
+        const errorsDisplay = document.getElementById("errors");
+        const startBtn = document.getElementById("start-btn");
+        const stopBtn = document.getElementById("stop-btn");
+        const restartBtn = document.getElementById("restart-btn");
+    
+        let currentText = "";
+        let startTime, errorCount = 0;
+    
+        startBtn.addEventListener("click", () => {
+            resetTest();
+            currentText = sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
+            textDisplay.textContent = currentText;
+            startTime = new Date();
+            startBtn.style.display = "none";
+            stopBtn.style.display = "inline";
+        });
+    
+        stopBtn.addEventListener("click", () => {
+            stopBtn.style.display = "none";
+            restartBtn.style.display = "inline";
+        });
+    
+        restartBtn.addEventListener("click", () => {
+            resetTest();
+            restartBtn.style.display = "none";
+            startBtn.style.display = "inline";
+        });
+    
+        userInput.addEventListener("input", () => {
+            const typedText = userInput.value;
+            const elapsedTime = (new Date() - startTime) / 60000;
+            const wordsTyped = typedText.split(/\s+/).length;
+            const speed = Math.round(wordsTyped / elapsedTime) || 0;
+    
+            errorCount = 0;
+            textDisplay.innerHTML = currentText
+                .split("")
+                .map((char, idx) => {
+                    if (idx < typedText.length) {
+                        return typedText[idx] === char
+                            ? `<span class="correct">${char}</span>`
+                            : `<span class="incorrect">${char}</span>`;
+                    }
+                    return char;
+                })
+                .join("");
+    
+            const correctChars = currentText.substring(0, typedText.length).split("").filter((char, idx) => char === typedText[idx]).length;
+            const accuracy = Math.round((correctChars / typedText.length) * 100) || 0;
+    
+            wpmDisplay.textContent = speed;
+            accuracyDisplay.textContent = accuracy;
+            errorsDisplay.textContent = errorCount;
+        });
+    
+        function resetTest() {
+            userInput.value = "";
+            userInput.removeAttribute("disabled");
+            textDisplay.innerHTML = "";
+            wpmDisplay.textContent = "0";
+            accuracyDisplay.textContent = "0";
+            errorsDisplay.textContent = "0";
+            errorCount = 0;
+        }
+    </script>
+    
+</body>
+</html>
