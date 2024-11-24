@@ -1,7 +1,7 @@
 # Typing Master - Typing Speed Test 🚀
 _A clean, interactive, and fun way to enhance your typing skills._
 
-![Typing Master Logo](./assets/logo.png)
+![Typing Master Logo](./BG.png)
 
 ## About the Project
 Typing Master is an engaging web-based application designed to help users improve their typing speed, accuracy, and efficiency. With its user-friendly interface and real-time feedback, it's the perfect platform for anyone from beginners to typing pros to practice and track progress.
