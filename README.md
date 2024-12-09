@@ -18,4 +18,4 @@ Typing Master is an engaging web-based application designed to help users improv
 - **Fonts**: Google Fonts - _Sono_
 - **Design**: Minimalistic with a focus on user experience.
 # Screenshot :
-![Typing Master ](./screenshot.png)
+![Typing Master ](./Screenshot.png)
