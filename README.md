@@ -1,4 +1,4 @@
-# Typing Master - Typing Speed Test 🚀
+# Typing Master - Typing Speed Test🚀
 _A clean, interactive, and fun way to enhance your typing skills._
 
 ![Typing Master Logo](./typing_Mlogo.png)
